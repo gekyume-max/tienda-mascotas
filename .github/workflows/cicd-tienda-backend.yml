@@ -3,8 +3,6 @@ name: CI/CD Tienda Perritos - Backend
 on:
   push:
     branches: [ "main", "deploy" ]
-    paths:
-      - "backend/**"
 
 jobs:
   build-push-deploy-backend:
