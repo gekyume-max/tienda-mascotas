@@ -1,13 +1,13 @@
-name: CI/CD Tienda Perritos - Backend
+name: CI/CD Tienda Perritos - DB
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "deploy" ]
     paths:
-      - "backend/**"
+      - "db/**"
 
 jobs:
-  build-push-deploy-backend:
+  build-push-deploy-db:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,25 +25,25 @@ jobs:
     - name: Login en Amazon ECR (runner)
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build imagen Backend y push a ECR
+    - name: Build imagen DB y push a ECR
       run: |
-        cd backend
-        docker build -t tienda-backend .
-        docker tag tienda-backend:latest ${{ secrets.ECR_REPO_URL_BACKEND }}:latest
-        docker push ${{ secrets.ECR_REPO_URL_BACKEND }}:latest
+        cd db
+        docker build -t tienda-db .
+        docker tag tienda-db:latest ${{ secrets.ECR_REPO_URL_DB }}:latest
+        docker push ${{ secrets.ECR_REPO_URL_DB }}:latest
 
-    - name: Desplegar Backend vía SSM
+    - name: Desplegar DB vía SSM
       run: |
         aws ssm send-command \
-          --instance-ids ${{ secrets.EC2_BACKEND_INSTANCE_ID }} \
+          --instance-ids ${{ secrets.EC2_DB_INSTANCE_ID }} \
           --document-name "AWS-RunShellScript" \
-          --comment "Actualizar tienda-backend desde ECR" \
+          --comment "Actualizar tienda-db desde ECR" \
           --parameters '{"commands":[
             "set -e",
             "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}",
-            "docker pull ${{ secrets.ECR_REPO_URL_BACKEND }}:latest",
-            "docker stop tienda-backend || true",
-            "docker rm tienda-backend || true",
-            "docker run -d --name tienda-backend -p 3001:3001 ${{ secrets.ECR_REPO_URL_BACKEND }}:latest"
+            "docker pull ${{ secrets.ECR_REPO_URL_DB }}:latest",
+            "docker stop tienda-db || true",
+            "docker rm tienda-db || true",
+            "docker run -d --name tienda-db -p 3306:3306 -v dbdata:/var/lib/mysql ${{ secrets.ECR_REPO_URL_DB }}:latest"
           ]}' \
           --output text

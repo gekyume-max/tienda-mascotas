@@ -1,13 +1,13 @@
-name: CI/CD Tienda Perritos - Frontend
+name: CI/CD Tienda Perritos - Backend
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "deploy" ]
     paths:
-      - "frontend/**"
+      - "backend/**"
 
 jobs:
-  build-push-deploy-frontend:
+  build-push-deploy-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,25 +25,25 @@ jobs:
     - name: Login en Amazon ECR (runner)
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build imagen Frontend y push a ECR
+    - name: Build imagen Backend y push a ECR
       run: |
-        cd frontend
-        docker build -t tienda-frontend .
-        docker tag tienda-frontend:latest ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
-        docker push ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
+        cd backend
+        docker build -t tienda-backend .
+        docker tag tienda-backend:latest ${{ secrets.ECR_REPO_URL_BACKEND }}:latest
+        docker push ${{ secrets.ECR_REPO_URL_BACKEND }}:latest
 
-    - name: Desplegar Frontend vía SSM
+    - name: Desplegar Backend vía SSM
       run: |
         aws ssm send-command \
-          --instance-ids ${{ secrets.EC2_FRONTEND_INSTANCE_ID }} \
+          --instance-ids ${{ secrets.EC2_BACKEND_INSTANCE_ID }} \
           --document-name "AWS-RunShellScript" \
-          --comment "Actualizar tienda-frontend desde ECR" \
+          --comment "Actualizar tienda-backend desde ECR" \
           --parameters '{"commands":[
             "set -e",
             "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}",
-            "docker pull ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest",
-            "docker stop tienda-frontend || true",
-            "docker rm tienda-frontend || true",
-            "docker run -d --name tienda-frontend -p 80:80 ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest"
+            "docker pull ${{ secrets.ECR_REPO_URL_BACKEND }}:latest",
+            "docker stop tienda-backend || true",
+            "docker rm tienda-backend || true",
+            "docker run -d --name tienda-backend -p 3001:3001 ${{ secrets.ECR_REPO_URL_BACKEND }}:latest"
           ]}' \
           --output text
