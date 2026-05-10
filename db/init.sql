@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS productos (
 );
 
 INSERT INTO productos (nombre, descripcion, precio, stock) VALUES
-('Saco Alimento Premium', 'Sabor pollo para cachorros 15kg', 45990.00, 20),
+('Saco Alimento Premiun', 'Saco pollo para cachorros 15kg', 45990.00, 20),
 ('Bravery pollo Adulto raza pequena', 'Sabor a pollo', 25990.00, 20),
 ('Alimento Adulto Pedigree', 'Sabor carne', 15990.00, 40),
 ('Snacks Dentales', 'Ayuda a la limpieza dental', 5990.00, 30),
