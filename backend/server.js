@@ -6,9 +6,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 const {
-  DB_HOST = "db-perritos", 
+  DB_HOST = "db-perritos",
   DB_USER = "root",
-  DB_PASSWORD = "root",    
+  DB_PASSWORD = "root",
   DB_NAME = "tienda_perritos",
   DB_PORT = 3306,
 } = process.env;
