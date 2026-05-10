@@ -17,7 +17,6 @@ Se utilizan **Named Volumes** en el servicio de base de datos para garantizar la
 - `mysql_data:/var/lib/mysql`
 
 ## Requisitos
-- Docker Desktop
 - AWS Academy
 - AWS CLI
 
@@ -44,5 +43,5 @@ docker run -d --name front-perritos --network tienda-red -p 8080:80 tienda-front
 ```
 
 ## Acceso al Despliegue en AWS
-- URL Frontend: http://32.197.127.203:8080
-- URL API (Backend): http://13.217.32.135:3001/api/productos
+- URL Frontend: http://NUEVA_IP:8080
+- URL API (Backend): http://NUEVA_IP:3001/api/productos
