@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS productos (
     stock INT NOT NULL
 );
 
+
+/*el profe*/
 INSERT INTO productos (nombre, descripcion, precio, stock) VALUES
 ('Saco Alimento Premiun', 'Saco pollo para cachorros 15kg', 45990.00, 20),
 ('Bravery pollo Adulto raza pequena', 'Sabor a pollo', 25990.00, 20),
