@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tienda-frontend-service
+  namespace: tienda
+  annotations:
+    # Indicamos que el LB lo maneja el AWS Load Balancer Controller
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    # Forzamos que sea público (no interno) para cumplir acceso por URL pública
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+spec:
+  type: LoadBalancer
+  selector:
+    app: tienda-frontend # <-- Asegúrate de que en tu frontend-deployment.yaml diga "app: tienda-frontend" en los labels
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
