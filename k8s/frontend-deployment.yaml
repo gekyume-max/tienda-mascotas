@@ -15,21 +15,20 @@ spec:
   spec:
     containers:
       - name: frontend
-        # Cambia TU_ID_CUENTA_AWS por tu ID real de AWS Academy
-        image: TU_ID_CUENTA_AWS.dkr.ecr.us-east-1.amazonaws.com/tienda-frontend:eks-v1
+        image: 078638534339.dkr.ecr.us-east-1.amazonaws.com/tienda-frontend:eks-v1
         ports:
           - containerPort: 80
         
         # Recursos obligatorios para que el Metrics Server active el HPA (Autoscaling)
         resources:
-          requests:
-            cpu: "100m"
-            memory: "128Mi"
-          limits:
-            cpu: "500m"
-            memory: "512Mi"
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
 
-        # HEALTH CHECKS (Asegúrate de que tu nginx/frontend responda en la raíz /)
+        # HEALTH CHECKS 
         readinessProbe:
           httpGet:
             path: /
