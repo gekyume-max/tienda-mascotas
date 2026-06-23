@@ -27,7 +27,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
-                  key: MYSQL_ROOT_PASSWORD
+                  key: mysql-root-password
             - name: DB_NAME
               value: "tienda_perritos"
             - name: DB_PORT
